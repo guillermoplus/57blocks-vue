@@ -41,7 +41,7 @@ class Authentication {
         if (Authentication.encryptedStorage === null) {
             Authentication.encryptedStorage = new EncryptStorage(Authentication.encryptationKey, {
                 prefix: '@myApp',
-                storageType: 'sessionStorage',
+                storageType: 'localStorage',
             });
         }
         return Authentication.encryptedStorage;
