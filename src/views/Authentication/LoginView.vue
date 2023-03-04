@@ -6,9 +6,9 @@
           <h3 class="title is-3">Login</h3>
           <form action="">
             <div class="field">
-              <label for="username" class="label">Username</label>
+              <label for="email" class="label">Email</label>
               <div class="control">
-                <input type="text" id="username" class="input" placeholder="Email" v-model="form.username">
+                <input type="email" id="email" class="input" placeholder="Email" v-model="form.username">
               </div>
             </div>
             <div class="field">
@@ -42,7 +42,7 @@ const form = ref({
 })
 const submit = () => {
   if (!form.value.username || !form.value.password) {
-    alert('You must fill in all the fields of the login form!');
+    alert('You must enter a valid email and password to login!');
   }
   Authentication.authenticate(form.value.username, form.value.password);
   router.push({name: 'home'});
