@@ -33,7 +33,7 @@ class Authentication {
     }
 
     static logout() {
-        Authentication.getEncryptedStorage().clear();
+        Authentication.getEncryptedStorage().removeItem(Authentication.authKey);
     }
 
     static getEncryptedStorage(): EncryptStorage {

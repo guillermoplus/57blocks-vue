@@ -21,6 +21,9 @@
               <button class="button is-link">Iniciar sesión</button>
               <a href="#" class="button is-ghost">Olvidó su contraseña</a>
             </div>
+            <div class="notification is-danger">
+              This is only an authentication system simulation, you can use any username and password to log in.
+            </div>
           </form>
         </div>
       </div>
@@ -38,6 +41,9 @@ const form = ref({
   password: '',
 })
 const submit = () => {
+  if (!form.value.username || !form.value.password) {
+    alert('You must fill in all the fields of the login form!');
+  }
   Authentication.authenticate(form.value.username, form.value.password);
   router.push({name: 'home'});
 };
