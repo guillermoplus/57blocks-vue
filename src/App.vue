@@ -1,85 +1,55 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import {RouterLink, RouterView, useRoute} from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import {computed} from "vue";
+import Authentication from "@/helpers/authentication";
+
+const route = useRoute();
+const path = computed(() => route.path);
+const logout = () => {
+  Authentication.logout();
+  window.location.reload();
+}
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125"/>
+    <div class="tabs is-centered">
+      <ul>
+        <li :class="{'is-active':path==='/'}">
+          <RouterLink to="/">
+            <span class="icon is-small"><i class="fas fa-house" aria-hidden="true"></i></span>
+            <span>Home</span>
+          </RouterLink>
+        </li>
+        <li :class="{'is-active':path==='/favorites'}">
+          <RouterLink to="/favorites">
+            <span class="icon is-small"><i class="fas fa-heart" aria-hidden="true"></i></span>
+            <span>Favorites</span>
+          </RouterLink>
+        </li>
+        <li :class="{'is-active':path==='/login'}" v-show="!Authentication.isAuthenticated()">
+          <RouterLink to="/login">
+            <span class="icon is-small"><i class="fas fa-user" aria-hidden="true"></i></span>
+            <span>Login</span>
+          </RouterLink>
+        </li>
+        <li v-show="Authentication.isAuthenticated()">
+          <a @click="logout">
+            <span class="icon is-small"><i class="fas fa-times" aria-hidden="true"></i></span>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </header>
 
-  <RouterView />
+  <div class="container is-widescreen">
+    <RouterView/>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>

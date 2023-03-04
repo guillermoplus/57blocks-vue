@@ -15,12 +15,12 @@ const router = createRouter({
             }
         },
         {
-            path: '/about',
-            name: 'about',
+            path: '/favorites',
+            name: 'favorites',
             // route level code-splitting
             // this generates a separate chunk (About.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
-            component: () => import('../views/AboutView.vue'),
+            component: () => import('../views/FavoritesView.vue'),
             meta: {
                 protected: true,
             }
@@ -29,15 +29,20 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: () => import('../views/Authentication/LoginView.vue'),
+            meta: {
+                isLoginPage: true
+            }
         },
     ]
 })
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
+    const isLoggedIn = Authentication.isAuthenticated();
+    if (to.meta?.isLoginPage === true && isLoggedIn) {
+        return '/';
+    }
     if (to.meta?.protected === true) {
-        const isLoggedIn = Authentication.isAuthenticated();
-
         if (!isLoggedIn) {
             return '/login';
         }
