@@ -1,15 +1,9 @@
 <template>
-  <div class="favorites">
-    <h1>This is favorites page</h1>
-  </div>
+  <main>
+    <h1>Favorites page</h1>
+  </main>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .favorites {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
+<style scoped>
+
 </style>

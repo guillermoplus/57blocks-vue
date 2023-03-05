@@ -39,10 +39,11 @@ import router from "@/router";
 const form = ref({
   username: '',
   password: '',
-})
+});
 const submit = () => {
   if (!form.value.username || !form.value.password) {
     alert('You must enter a valid email and password to login!');
+    return;
   }
   Authentication.authenticate(form.value.username, form.value.password);
   router.push({name: 'home'});
