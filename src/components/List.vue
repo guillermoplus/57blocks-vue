@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import Item from '@/components/Item.vue';
-import Movie from '@/components/item-types/Movie.vue';
+import Pokemon from '@/components/Pokemon.vue';
+import type PaginationResult from "@/models/api/PaginationResult";
 
 const props = defineProps({
   items: {
-    type: Array,
-    default: new Array(0)
+    type: Object as () => PaginationResult,
   }
-})
-
-const arrTemp = new Array(20).fill('');
+});
 </script>
 
 <template>
   <table class="table is-fullwidth is-hoverable">
     <tbody>
-    <tr v-for="item in items" :key="item.id">
+    <tr v-for="item in items.results" :key="item.url">
       <td>
         <Item>
-          <Movie v-bind="item"/>
+          <Suspense>
+            <Pokemon :pokemon="item"/>
+          </Suspense>
         </Item>
       </td>
     </tr>
