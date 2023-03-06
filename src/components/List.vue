@@ -39,11 +39,19 @@ const middlePages = computed<number[]>(() => {
 });
 
 const nextPage = () => {
+  pagination.value.currentPage = pagination.value.currentPage + 1;
+  pagination.value.offset = (pagination.value.currentPage * pagination.value.limit) + 1;
+  pagination.value.lastPage = totalPages.value;
   console.log('nextPage');
+  emit('nextPage');
 };
 
 const previousPage = () => {
+  pagination.value.currentPage = pagination.value.currentPage - 1;
+  pagination.value.offset = (pagination.value.currentPage * pagination.value.limit) + 1;
+  pagination.value.lastPage = totalPages.value;
   console.log('previousPage');
+  emit('previousPage');
 }
 
 const pageClicked = (pageNumber: number) => {
