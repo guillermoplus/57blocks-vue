@@ -12,6 +12,8 @@ const router = createRouter({
             component: HomeView,
             meta: {
                 protected: true,
+                enterClass: 'animate__animated animate__bounceIn',
+                leaveClass: 'animate__animated animate__bounceOut',
             }
         },
         {
@@ -31,6 +33,8 @@ const router = createRouter({
             component: () => import('../views/DetailView.vue'),
             meta: {
                 protected: true,
+                enterClass: 'animate__animated animate__bounceIn',
+                leaveClass: 'animate__animated animate__bounceOut',
             }
         },
         {

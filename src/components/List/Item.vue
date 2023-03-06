@@ -1,10 +1,9 @@
 <template>
   <div class="columns is-mobile is-multiline">
-    <div class="column is-8-mobile is-10-tablet">
+    <div class="column is-8-mobile is-10-tablet cursor-pointer" @click="viewDetail">
       <slot></slot>
     </div>
     <div class="column is-4-mobile is-2-tablet">
-      <button class="button" @click="viewDetail">View detail</button>
       <button class="button is-white has-text-danger" @click="clickOnFavorite">
         <i :class="[isFavorite ? 'fa-solid' : 'fa-regular', 'fa-heart']"></i>
       </button>
@@ -66,5 +65,7 @@ const viewDetail = () => {
 </script>
 
 <style scoped>
-
+.cursor-pointer:hover {
+  cursor: pointer;
+}
 </style>

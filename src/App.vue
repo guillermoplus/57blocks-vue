@@ -2,6 +2,7 @@
 import {RouterLink, RouterView, useRoute} from 'vue-router'
 import {computed, ref, watch} from "vue";
 import Authentication from "@/helpers/authentication";
+import DetailView from '@/views/DetailView.vue';
 
 const route = useRoute();
 const path = computed(() => route.path);
@@ -14,6 +15,10 @@ watch(route, () => {
 const logout = () => {
   Authentication.logout();
   window.location.reload();
+}
+
+const hasTransition = (path: string) => {
+  return path.match('\\/detail\\/[A-z]*[0-9]*') !== null || path === '/';
 }
 </script>
 
@@ -53,7 +58,14 @@ const logout = () => {
   </header>
 
   <div class="container is-widescreen">
-    <RouterView/>
+    <RouterView v-slot="{Component, route}">
+      <transition
+          mode="out-in"
+          :enter-active-class="hasTransition(route.path) ? route.meta.enterClass : ''"
+          :leave-active-class="hasTransition(route.path) ? route.meta.leaveClass : ''">
+        <component :is="Component"/>
+      </transition>
+    </RouterView>
   </div>
 </template>
 
