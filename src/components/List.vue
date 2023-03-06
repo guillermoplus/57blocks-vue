@@ -9,9 +9,7 @@ const props = defineProps({
   }
 });
 
-const item = {
-
-};
+const item = {};
 </script>
 
 <template>
@@ -19,7 +17,7 @@ const item = {
     <tbody>
     <tr v-for="item in items.results" :key="item.name">
       <td>
-        <Item>
+        <Item :id="item.name">
           <Suspense>
             <Pokemon :pokemon="item"/>
           </Suspense>

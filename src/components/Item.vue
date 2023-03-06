@@ -13,13 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import StoreServices from "@/services/StoreServices";
 
 const props = defineProps({
   id: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: '0',
+    required: true
   }
 });
 
