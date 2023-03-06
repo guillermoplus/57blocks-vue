@@ -19,7 +19,9 @@ const logout = () => {
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125"/>
+    <div class="logo">
+      <img alt="Vue logo" src="@/assets/logo.png"/>
+    </div>
     <div class="tabs is-centered">
       <ul>
         <li :class="{'is-active':path==='/'}" v-show="isLoggedIn">
@@ -56,5 +58,11 @@ const logout = () => {
 </template>
 
 <style scoped>
+.logo img {
+  max-width: 120px;
+}
 
+.logo {
+  text-align: center;
+}
 </style>

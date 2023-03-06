@@ -8,10 +8,14 @@ const paginationResultIndex = ref<PaginationResult>({results: [], count: 0, next
 onBeforeMount(async () => {
   paginationResultIndex.value = (await PokeApiService.index()).data;
 });
+
+const pageClickedHandler = ($event) => {
+  console.log($event);
+}
 </script>
 
 <template>
   <main>
-    <List :items="paginationResultIndex"/>
+    <List :items="paginationResultIndex" @page-clicked="pageClickedHandler($event)"/>
   </main>
 </template>
