@@ -61,8 +61,7 @@ const removeFromFavorite = () => {
 };
 
 const viewDetail = () => {
-  console.log('viewDetail');
-  emit('viewDetail');
+  emit('viewDetail', props.id);
 };
 </script>
 

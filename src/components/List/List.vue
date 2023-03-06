@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import Item from '@/components/Item.vue';
-import Pokemon from '@/components/Pokemon.vue';
+import Item from '@/components/List/Item.vue';
+import Pokemon from '@/components/PokemonListItem.vue';
 import type PaginationResult from "@/models/api/PaginationResult";
 import {computed, ref} from "vue";
 import type PaginationParams from "@/models/PaginationParams";
 
 const props = defineProps({
-  pagination: {
-    type: Object,
-    required: true,
-  },
   items: {
     type: Object as () => PaginationResult,
     required: true,
@@ -80,7 +76,7 @@ const updatePaginationParams = (newCurrentPage: number) => {
     <tbody>
     <tr v-for="item in items.results" :key="item.name">
       <td>
-        <Item :id="item.name">
+        <Item :id="item.name" @view-detail="item.action">
           <Suspense>
             <Pokemon :pokemon="item"/>
           </Suspense>
