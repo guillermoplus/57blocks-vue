@@ -1,7 +1,7 @@
 import type Sprites from "@/models/api/Sprites";
 
 interface Pokemon {
-    id: number,
+    id: number | string,
     name: string,
     height: number,
     weight: number,
