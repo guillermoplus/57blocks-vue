@@ -34,31 +34,50 @@ const totalPages = computed<number>(() => {
 });
 
 const middlePages = computed<number[]>(() => {
-  const middle = Math.trunc(totalPages.value / 2);
-  return [middle - 1, middle, middle + 1];
+  let pages: number[] = [];
+  let middle = pagination.value.currentPage;
+  if (isFirstPage()) {
+    middle = Math.trunc(totalPages.value / 2);
+    pages = [middle + 1, middle + 2, middle + 3];
+  } else if (isLastPage()) {
+    pages = [middle - 3, middle - 2, middle - 1];
+  } else {
+    pages = [middle - 1, middle, middle + 1];
+  }
+  return pages;
 });
 
 const nextPage = () => {
-  pagination.value.currentPage = pagination.value.currentPage + 1;
-  pagination.value.offset = (pagination.value.currentPage * pagination.value.limit) + 1;
-  pagination.value.lastPage = totalPages.value;
+  if (isLastPage()) return;
+  updatePaginationParams(pagination.value.currentPage + 1);
   console.log('nextPage');
-  emit('nextPage');
+  emit('nextPage', pagination);
+
 };
 
 const previousPage = () => {
-  pagination.value.currentPage = pagination.value.currentPage - 1;
-  pagination.value.offset = (pagination.value.currentPage * pagination.value.limit) + 1;
-  pagination.value.lastPage = totalPages.value;
-  console.log('previousPage');
-  emit('previousPage');
+  if (isFirstPage()) return;
+  updatePaginationParams(pagination.value.currentPage - 1);
+  emit('previousPage', pagination);
 }
 
 const pageClicked = (pageNumber: number) => {
-  pagination.value.currentPage = pageNumber;
-  pagination.value.offset = (pageNumber * pagination.value.limit) + 1;
-  pagination.value.lastPage = totalPages.value;
+  updatePaginationParams(pageNumber);
   emit('pageClicked', pagination);
+};
+
+const updatePaginationParams = (newCurrentPage: number) => {
+  pagination.value.currentPage = newCurrentPage;
+  pagination.value.offset = (newCurrentPage * pagination.value.limit) + 1;
+  pagination.value.lastPage = totalPages.value;
+};
+
+const isLastPage = () => {
+  return pagination.value.currentPage >= totalPages.value;
+};
+
+const isFirstPage = () => {
+  return pagination.value.currentPage <= 1;
 };
 </script>
 
@@ -89,7 +108,9 @@ const pageClicked = (pageNumber: number) => {
       </li>
       <li><span class="pagination-ellipsis">&hellip;</span></li>
       <li><a :class="{'pagination-link': true, 'is-current': pagination.currentPage === totalPages}"
-             aria-label="Goto page 86" @click="pageClicked(totalPages)">{{ totalPages }}</a></li>
+             aria-label="Goto page 86" @click="pageClicked(totalPages)">{{
+          totalPages
+        }}</a></li>
     </ul>
   </nav>
 </template>
