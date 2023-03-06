@@ -2,7 +2,6 @@
 import {RouterLink, RouterView, useRoute} from 'vue-router'
 import {computed, ref, watch} from "vue";
 import Authentication from "@/helpers/authentication";
-import DetailView from '@/views/DetailView.vue';
 
 const route = useRoute();
 const path = computed(() => route.path);

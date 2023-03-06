@@ -1,4 +1,4 @@
-class StoreServices {
+class StoreService {
     private static favoriteKeyStore: string = 'favorites';
 
     static storeFavorite(id: any) {
@@ -30,6 +30,18 @@ class StoreServices {
         const found = favorites.find(item => item === id);
         return found !== undefined ? found : null;
     }
+
+    static getFavorites(limit: number = 20, offset: number = 0): any[] {
+        const record = localStorage.getItem(this.favoriteKeyStore);
+        const favorites: any[] = record ? JSON.parse(record) : [];
+        if (!Array.isArray(favorites)) {
+            return [];
+        }
+        if (limit === -1) {
+            return favorites;
+        }
+        return favorites.slice(offset, offset + limit);
+    }
 }
 
-export default StoreServices;
+export default StoreService;

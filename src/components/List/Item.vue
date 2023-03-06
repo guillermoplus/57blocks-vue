@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import {onBeforeMount, ref} from "vue";
-import StoreServices from "@/services/StoreServices";
+import StoreService from "@/services/StoreService";
 
 const props = defineProps({
   id: {
@@ -28,7 +28,7 @@ const emit = defineEmits(['addToFavorite', 'removeFromFavorite', 'viewDetail']);
 const isFavorite = ref(false);
 
 onBeforeMount(() => {
-  isFavorite.value = StoreServices.getFavorite(props.id) !== null;
+  isFavorite.value = StoreService.getFavorite(props.id) !== null;
 });
 
 const clickOnFavorite = () => {
@@ -41,7 +41,7 @@ const clickOnFavorite = () => {
 
 const addToFavorite = () => {
   try {
-    StoreServices.storeFavorite(props.id);
+    StoreService.storeFavorite(props.id);
     isFavorite.value = true;
     emit('addToFavorite');
   } catch {
@@ -51,7 +51,7 @@ const addToFavorite = () => {
 
 const removeFromFavorite = () => {
   try {
-    StoreServices.removeFavorite(props.id);
+    StoreService.removeFavorite(props.id);
     isFavorite.value = false;
     emit('removeFromFavorite');
   } catch {
