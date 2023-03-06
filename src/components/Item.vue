@@ -1,10 +1,11 @@
 <template>
   <div class="columns is-mobile is-multiline">
-    <div class="column is-10-mobile is-11-tablet">
+    <div class="column is-8-mobile is-10-tablet">
       <slot></slot>
     </div>
-    <div class="column is-2-mobile is-1-tablet">
-      <button class="button is-white has-text-danger" @click="addToFavorite">
+    <div class="column is-4-mobile is-2-tablet">
+      <button class="button" @click="viewDetail">View detail</button>
+      <button class="button is-white has-text-danger" @click="clickOnFavorite">
         <i :class="[isFavorite ? 'fa-solid' : 'fa-regular', 'fa-heart']"></i>
       </button>
     </div>
@@ -12,22 +13,55 @@
 </template>
 
 <script setup lang="ts">
+import {computed, onBeforeMount, ref} from "vue";
+import StoreServices from "@/services/StoreServices";
+
 const props = defineProps({
   id: {
     type: Number,
     default: 0,
-  },
-  isFavorite: {
-    type: Boolean,
-    default: false,
-  },
+  }
 });
 
-const emit = defineEmits(['addToFavorite']);
+const emit = defineEmits(['addToFavorite', 'removeFromFavorite', 'viewDetail']);
+
+const isFavorite = ref(false);
+
+onBeforeMount(() => {
+  isFavorite.value = StoreServices.getFavorite(props.id) !== null;
+});
+
+const clickOnFavorite = () => {
+  if (!isFavorite.value) {
+    addToFavorite();
+  } else {
+    removeFromFavorite();
+  }
+}
 
 const addToFavorite = () => {
-  console.log('addToFavorite', props.id);
-  emit('addToFavorite', props.id);
+  try {
+    StoreServices.storeFavorite(props.id);
+    isFavorite.value = true;
+    emit('addToFavorite');
+  } catch {
+    isFavorite.value = false;
+  }
+};
+
+const removeFromFavorite = () => {
+  try {
+    StoreServices.removeFavorite(props.id);
+    isFavorite.value = false;
+    emit('removeFromFavorite');
+  } catch {
+    isFavorite.value = true;
+  }
+};
+
+const viewDetail = () => {
+  console.log('viewDetail');
+  emit('viewDetail');
 };
 </script>
 

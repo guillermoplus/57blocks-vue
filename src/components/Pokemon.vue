@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type PaginationResultItem from "@/models/api/PaginationResultItem";
-import PokeApi from "@/services/api/PokeApi";
+import PokeApiService from "@/services/api/PokeApiService";
 
 const props = defineProps({
   pokemon: Object as () => PaginationResultItem
-})
+});
 
-const pokemonInfo = (await PokeApi.getPokemon(props.pokemon?.name ?? '')).data;
+const pokemonInfo = (await PokeApiService.getPokemon(props.pokemon?.name ?? '')).data;
 
 </script>
 

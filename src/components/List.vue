@@ -8,12 +8,16 @@ const props = defineProps({
     type: Object as () => PaginationResult,
   }
 });
+
+const item = {
+
+};
 </script>
 
 <template>
   <table class="table is-fullwidth is-hoverable">
     <tbody>
-    <tr v-for="item in items.results" :key="item.url">
+    <tr v-for="item in items.results" :key="item.name">
       <td>
         <Item>
           <Suspense>

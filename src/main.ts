@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/main.css'
-import PokeApi from "@/services/api/PokeApi";
+import PokeApiService from "@/services/api/PokeApiService";
 
 const app = createApp(App)
 
