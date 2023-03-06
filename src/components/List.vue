@@ -13,71 +13,65 @@ const props = defineProps({
   items: {
     type: Object as () => PaginationResult,
     required: true,
+  },
+  currentPage: {
+    type: Number,
+    required: true,
+    default: 1,
+  },
+  totalPages: {
+    type: Number,
+    required: true,
+  },
+  visiblePageRange: {
+    type: Number,
+    default: 5,
+  },
+  perPage: {
+    type: Number,
+    default: 20,
   }
 });
 
-const emit = defineEmits(['previousPage', 'nextPage', 'pageClicked']);
+const emit = defineEmits(['pageChange']);
 
-const pagination = ref<PaginationParams>({
-  limit: 20,
+const paginationParams = ref<PaginationParams>({
+  limit: props.perPage,
   offset: 0,
   total: props.items?.count,
   next: props.items?.next,
   previous: props.items?.previous,
-  currentPage: 1,
-  lastPage: 1,
+  currentPage: props.currentPage,
+  lastPage: props.totalPages,
 });
 
-const totalPages = computed<number>(() => {
-  let pages = props.items?.count / 20;
-  return pages % 2 === 0 ? pages : Math.trunc(pages) + 1;
-});
+const showPreviousButton = computed(() => props.currentPage > 1);
 
-const middlePages = computed<number[]>(() => {
-  let pages: number[] = [];
-  let middle = pagination.value.currentPage;
-  if (isFirstPage()) {
-    middle = Math.trunc(totalPages.value / 2);
-    pages = [middle + 1, middle + 2, middle + 3];
-  } else if (isLastPage()) {
-    pages = [middle - 3, middle - 2, middle - 1];
-  } else {
-    pages = [middle - 1, middle, middle + 1];
+const showNextButton = computed(() => props.currentPage < props.totalPages);
+
+const visiblePages = computed(() => {
+  const halfRange = Math.floor(props.visiblePageRange / 2);
+  const startPage = Math.max(1, props.currentPage - halfRange);
+  const endPage = Math.min(props.totalPages, startPage + props.visiblePageRange - 1);
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
   }
-  return pages;
+  return pages
 });
 
-const nextPage = () => {
-  if (isLastPage()) return;
-  updatePaginationParams(pagination.value.currentPage + 1);
-  console.log('nextPage');
-  emit('nextPage', pagination);
-
-};
-
-const previousPage = () => {
-  if (isFirstPage()) return;
-  updatePaginationParams(pagination.value.currentPage - 1);
-  emit('previousPage', pagination);
-}
-
-const pageClicked = (pageNumber: number) => {
+const onPageChange = (pageNumber: number) => {
+  if (pageNumber < 1 || pageNumber > props.totalPages || pageNumber === props.currentPage) {
+    return;
+  }
   updatePaginationParams(pageNumber);
-  emit('pageClicked', pagination);
+  emit('pageChange', paginationParams.value);
 };
 
 const updatePaginationParams = (newCurrentPage: number) => {
-  pagination.value.currentPage = newCurrentPage;
-  pagination.value.offset = (newCurrentPage * pagination.value.limit) + 1;
-  pagination.value.lastPage = totalPages.value;
-};
-
-const isLastPage = () => {
-  return pagination.value.currentPage >= totalPages.value;
-};
-
-const isFirstPage = () => {
-  return pagination.value.currentPage <= 1;
+  paginationParams.value.currentPage = newCurrentPage;
+  paginationParams.value.offset = ((newCurrentPage - 1) * paginationParams.value.limit);
+  paginationParams.value.lastPage = props.totalPages;
 };
 </script>
 
@@ -96,21 +90,13 @@ const isFirstPage = () => {
     </tbody>
   </table>
   <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-    <a class="pagination-previous" @click="previousPage">Previous</a>
-    <a class="pagination-next" @click="nextPage">Next page</a>
+    <a class="pagination-previous" v-show="showPreviousButton" @click="onPageChange(currentPage - 1)">Previous</a>
+    <a class="pagination-next" v-show="showNextButton" @click="onPageChange(currentPage + 1)">Next page</a>
     <ul class="pagination-list">
-      <li><a :class="{'pagination-link': true, 'is-current': pagination.currentPage === 1}" aria-label="Goto page 1"
-             @click="pageClicked(1)">1</a></li>
-      <li><span class="pagination-ellipsis">&hellip;</span></li>
-      <li v-for="page in middlePages" :key="page">
-        <a :class="{'pagination-link': true, 'is-current': pagination.currentPage === page}"
-           :aria-label="`Goto page ${page}`" @click="pageClicked(page)">{{ page }}</a>
+      <li v-for="page in visiblePages" :key="page">
+        <a :class="{'pagination-link': true, 'is-current': currentPage === page}"
+           :aria-label="`Goto page ${page}`" @click="onPageChange(page)">{{ page }}</a>
       </li>
-      <li><span class="pagination-ellipsis">&hellip;</span></li>
-      <li><a :class="{'pagination-link': true, 'is-current': pagination.currentPage === totalPages}"
-             aria-label="Goto page 86" @click="pageClicked(totalPages)">{{
-          totalPages
-        }}</a></li>
     </ul>
   </nav>
 </template>

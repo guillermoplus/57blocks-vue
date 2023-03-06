@@ -7,6 +7,7 @@ interface Sprites {
     front_female: string | null,
     front_shin: string | null,
     front_shiny_female: string | null,
+    other: { 'official-artwork': { front_default: string } } | null
 }
 
 export default Sprites;

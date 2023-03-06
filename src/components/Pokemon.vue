@@ -17,7 +17,8 @@ const pokemonInfo = (await PokeApiService.getPokemon(props.pokemon?.name ?? ''))
     </div>
     <div class="column is-3">
       <figure class="image is-128x128">
-        <img :src="pokemonInfo.sprites.front_default" alt="Thumbnail">
+        <img :src="pokemonInfo.sprites.other['official-artwork'].front_default ?? './src/assets/who-is.png'"
+             alt="Thumbnail">
       </figure>
     </div>
     <div class="column is-9"></div>
