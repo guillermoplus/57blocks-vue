@@ -42,6 +42,7 @@ const form = ref({
   username: '',
   password: '',
 });
+
 const submit = () => {
   if (!form.value.username || !form.value.password) {
     alert('You must enter a valid email and password to login!');
